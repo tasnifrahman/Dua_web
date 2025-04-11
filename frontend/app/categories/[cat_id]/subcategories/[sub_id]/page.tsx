@@ -7,8 +7,8 @@ interface Props {
   };
 }
 
-export default async function SubcategoryPage({ params }: Props) {
-  const { cat_id, sub_id } = await params; // Await the params
+export default function SubcategoryPage({ params }: Props) {
+  const { cat_id, sub_id } = params; // Await the params
 
   return (
     <div>
