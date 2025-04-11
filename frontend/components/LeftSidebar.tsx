@@ -51,7 +51,7 @@ export default function LeftSidebar() {
           >
             Categories
           </h2>
-          <ul className="w-30%">
+          <ul>
             {categories.map(cat => (
               <li key={cat.cat_id} className="mb-2">
                 <p className="font-bold text-green-700">{cat.cat_name_en}</p>
