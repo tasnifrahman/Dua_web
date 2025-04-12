@@ -20,9 +20,6 @@ export default function DuaList({ catId, subId }: { catId: string; subId: string
   const { theme } = useTheme(); // Get the current theme
   const [duas, setDuas] = useState<Dua[]>([]);
 
-  // useEffect(() => {
-  //   getDuas(catId, subId).then(setDuas);
-  // }, [catId, subId]);
   useEffect(() => {
     const fetchDuas = async () => {
       try {

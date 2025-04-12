@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { getCategories, getSubcategories } from '@/lib/api';
-import { useTheme } from '@/context/ThemeContext'; // Import the theme context
+import { useTheme } from '@/context/ThemeContext';
 
 interface Category {
   id: number;
@@ -17,21 +17,41 @@ interface SubCategory {
 }
 
 export default function LeftSidebar() {
-  const { theme } = useTheme(); // Get the current theme
+  const { theme } = useTheme();
   const [categories, setCategories] = useState<Category[]>([]);
   const [subcategories, setSubcategories] = useState<Record<number, SubCategory[]>>({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      const cats = await getCategories();
-      setCategories(cats);
-      for (const cat of cats) {
-        const subs = await getSubcategories(cat.cat_id);
-        setSubcategories(prev => ({ ...prev, [cat.cat_id]: subs }));
+      try {
+        const cats = await getCategories();
+        setCategories(cats);
+        const subcategoriesData: Record<number, SubCategory[]> = {};
+        
+        for (const cat of cats) {
+          const subs = await getSubcategories(cat.cat_id);
+          subcategoriesData[cat.cat_id] = subs;
+        }
+        
+        setSubcategories(subcategoriesData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
       }
     };
+    
     fetchData();
   }, []);
+
+  if (loading) {
+    return (
+      <aside className={`w-64 p-4 border-r overflow-y-auto h-screen ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
+        <div className="text-center">Loading...</div>
+      </aside>
+    );
+  }
 
   return (
     <aside
